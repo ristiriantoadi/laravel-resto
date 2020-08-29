@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Menu;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,5 +16,17 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/menu/makanan','MenuController@makanan');
-Route::get('/menu/minuman','MenuController@minuman');
+// Route::get('/menu/makanan','MenuController@makanan');
+// Route::get('/menu/minuman','MenuController@minuman');
+Route::get('/menu',function(){
+    $minuman = Menu::where('jenis', 'minuman')
+    ->get();
+    $makanan = Menu::where('jenis', 'makanan')
+    ->get();
+    $data=array(
+        'jenis'=>'makanan',
+        'minuman'=>$minuman,
+        'makanan'=>$makanan
+    );
+    return view('menu')->with($data);
+});
