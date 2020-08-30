@@ -30,3 +30,7 @@ Route::get('/menu',function(){
     );
     return view('menu')->with($data);
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

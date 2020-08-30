@@ -22,10 +22,10 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item mr-1">
-              <a class="nav-link btn btn-danger" href="#">Register</a>
+              <a class="nav-link btn btn-danger" href="{{ route('register') }}">Register</a>
           </li>
           <li class="nav-item">
-              <a class="nav-link btn btn-primary" href="#">Login</a>
+              <a class="nav-link btn btn-primary" href="{{ route('login') }}">Login</a>
           </li>
         </ul>
         {{-- <form class="form-inline my-2 my-lg-0">

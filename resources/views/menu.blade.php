@@ -17,6 +17,9 @@
       <div class="card menu-area">
         <div class="card-body">
           <h2 class="card-title">Menu</h2>
+          <div id="alert-pesanan-diantarkan" class="alert alert-success" style="display: none" role="alert">
+            Pesanan Anda akan segera diantarkan
+          </div>
           <ul class="nav nav-tabs">
             <li class="nav-item">
               <a id="tab-makanan" class="nav-link @if ($jenis === "makanan")
@@ -54,6 +57,7 @@
               </tr>
           </table>
           <h3 class="card-title">Total: 40000</h3>
+          <button type="button" id="button-pesan" class="btn btn-success">Pesan</button>
         </div>
       </div>
     </div>
@@ -69,7 +73,7 @@
 
   function renderBill(bills){
     var billTable = document.getElementById("bill-table");
-    billTable.innerHTML="";
+    billTable.innerHTML="<tr><th scope='col'>Nama</th><th scope='col'>Porsi</th><th scope='col'>Harga</th></tr>";
     bills.forEach((bill)=>{
       
       var tdNama = document.createElement('td');
@@ -165,6 +169,15 @@
       tabMakanan.classList.remove("active");
     }
     renderMenu(makanan);
+
+    var buttonPesan = document.getElementById("button-pesan");
+    buttonPesan.onclick = ()=>{
+      if(confirm("Anda yakin dengan pesanan Anda?")){
+        renderBill([]);
+        alertPesanan = document.getElementById("alert-pesanan-diantarkan");
+        alertPesanan.style.display="block";
+      }
+    }
   }
 
 </script>
