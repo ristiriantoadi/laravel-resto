@@ -122,7 +122,11 @@
       cardBody.appendChild(namaMenu);
       var hargaMenu = document.createElement("h5");
       hargaMenu.classList.add("card-title");
+      // item.harga = item.harga;
       hargaMenu.innerHTML=item.harga;
+      if(item.diskon == true){
+        hargaMenu.innerHTML += " (diskon 10%)";
+      }
       cardBody.appendChild(hargaMenu);
 
       var buttonBeli = document.createElement("button");
