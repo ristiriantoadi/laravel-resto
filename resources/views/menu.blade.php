@@ -1,4 +1,4 @@
-@extends('layouts.header');
+@extends('layouts.app');
 
 <style>
   .menu-container{
@@ -48,7 +48,7 @@
     <div class="col-md-4">
       <div class="card bill-area">
         <div class="card-body">
-          <h2 class="card-title">Pembayaran</h2>
+          <h2 class="card-title">Tagihan</h2>
           <table class="table" id="bill-table">
               <tr>
                 <th scope="col">Nama</th>
@@ -56,7 +56,7 @@
                 <th scope="col">Harga</th>
               </tr>
           </table>
-          <h3 class="card-title">Total: 40000</h3>
+          <h3 class="card-title" id="total-bayar">Total: Rp. 0</h3>
           <button type="button" id="button-pesan" class="btn btn-success">Pesan</button>
         </div>
       </div>
@@ -74,6 +74,8 @@
   function renderBill(bills){
     var billTable = document.getElementById("bill-table");
     billTable.innerHTML="<tr><th scope='col'>Nama</th><th scope='col'>Porsi</th><th scope='col'>Harga</th></tr>";
+    var totalBayar=0
+    document.getElementById("total-bayar").innerHTML="Total: Rp. "+totalBayar;
     bills.forEach((bill)=>{
       
       var tdNama = document.createElement('td');
@@ -82,12 +84,15 @@
       tdPorsi.innerHTML=bill.porsi;
       var tdHarga = document.createElement('td');
       tdHarga.innerHTML=bill.harga;
+      totalBayar+= bill.harga;
 
       var tr = document.createElement("tr");
       tr.appendChild(tdNama);
       tr.appendChild(tdPorsi);
       tr.appendChild(tdHarga);
       billTable.appendChild(tr);
+
+      document.getElementById("total-bayar").innerHTML="Total: Rp. "+totalBayar;
     });
   }
 
@@ -171,11 +176,43 @@
     renderMenu(makanan);
 
     var buttonPesan = document.getElementById("button-pesan");
+    var token=$('meta[name="csrf-token"]').attr('content');
+
     buttonPesan.onclick = ()=>{
-      if(confirm("Anda yakin dengan pesanan Anda?")){
-        renderBill([]);
-        alertPesanan = document.getElementById("alert-pesanan-diantarkan");
-        alertPesanan.style.display="block";
+      var pesanan = bills.map(x=>{
+      return x.id;
+    });
+    console.log(pesanan);
+      if(confirm("Anda yakin dengan pesanan Anda?")){  
+        fetch("/menu/pesan", {
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text-plain, */*",
+            "X-Requested-With": "XMLHttpRequest",
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+          },
+          method: 'post',
+          credentials: "same-origin",
+          body: JSON.stringify({
+            pesanan: pesanan
+          })
+        })
+        .then((data)=>{
+          // console.log(data.status);
+          if(data.status == "200"){
+            bills=[]
+            renderBill(bills);
+            alertPesanan = document.getElementById("alert-pesanan-diantarkan");
+            alertPesanan.style.display="block";
+          }
+        })
+        // .then((data) => {
+        //   form.reset();
+        //   window.location.href = redirect;
+        // })
+        .catch(function(error) {
+          console.log(error);
+        });
       }
     }
   }

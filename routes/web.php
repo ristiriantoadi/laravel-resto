@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use App\Menu;
 /*
 |--------------------------------------------------------------------------
@@ -14,7 +15,7 @@ use App\Menu;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/menu');
 });
 // Route::get('/menu/makanan','MenuController@makanan');
 // Route::get('/menu/minuman','MenuController@minuman');
@@ -29,6 +30,21 @@ Route::get('/menu',function(){
         'makanan'=>$makanan
     );
     return view('menu')->with($data);
+});
+
+Route::post('/menu/pesan',function(Request $request){
+    // return $request->input('foo');
+    // error_log($request->input('foo'));
+    if (Auth::check()) {
+        // The user is logged in...
+        error_log("logged in already");
+    }else{
+        error_log("not logged in");
+    }
+    // foreach($request->input('pesanan') as $pesanan){
+    //     error_log($pesanan);
+    // }
+    return "success";
 });
 
 Auth::routes();
